@@ -24,11 +24,26 @@ let picks = 0;
 //   - shows swatch.dataset.name and the hex code in the preview
 //   - removes "selected" from any other swatch and adds it to this one
 //   - adds 1 to picks and updates #pick-count
-
+function selectSwatch(swatch){
+  preview.style.backgroundColor = swatch.dataset.color;
+  previewName.textContent = swatch.dataset.name;
+  previewHex.textContent = swatch.dataset.color;
+};
+function updatePickCount() {
+  picks = picks +1;
+  pickCount.textContent = picks;
+}
 
 // TASK 2: Add ONE click listener to #palette (delegation).
 //   Use event.target.closest(".swatch") to find the clicked swatch.
 //   Ignore clicks that aren't on a swatch. Call selectSwatch().
+function handlePaletteClick(event) {
+  const swatch = event.target.closest(".swatch");
+  if (swatch) return;
+  selectSwatch(swatch);
+  updatePickCount();
+}
+palette.addEventListener("click", handlePaletteClick);
 
 
 // TASK 3: Handle the add-colour form "submit":
