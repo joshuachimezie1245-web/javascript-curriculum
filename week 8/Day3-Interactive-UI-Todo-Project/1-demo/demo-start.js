@@ -19,25 +19,29 @@ function loadTodoApp() {
     return savedTodos;
 };
 
-function saveTodosToStorage() {
+function saveTodosToLocalStorage() {
     // save data to storage 
+    localStorage.setItem("tasks", JSON.stringify(todoItems));
+    //function to render to app after saving to storage
+    renderTodoApp();
 };
 
 let todoItems = loadTodoApp(); // load from storage or start with empty array
 // console.log(todoItems);
 
 // STEP 3: render(): clear the list, build one <li> per task, append
-function createTodoItem(todo) {
-    const liElem = document.createElement("li");
-    liElem.className = "todo-item";
+function createTodoTask(todo) {
+    const liTaskElem = document.createElement("li");
+    liTaskElem.className = "todo-item";
     if (todo.completed) {
-        liElem.classList.add("completed"); // add "completed" class if class is complet
+        liTaskElem.classList.add("completed"); // add "completed" class if class is completed
     }
 
     //creating the delete button for the li
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "delete-btn";
     deleteBtn.textContent = "Delete";
+    deleteBtn.addEventListener("click", (event) => deleteTodoTask(todo.id, event)); // pass the id and event to the delete function
 
     //creating the text content for the li
     const liTextElem = document.createElement("span");
@@ -50,22 +54,23 @@ function createTodoItem(todo) {
     checkboxElem.type = "checkbox";
     checkboxElem.className = "toggle";
     checkboxElem.checked = todo.completed; // set checkbox state based on completed property
+    checkboxElem.addEventListener("change", () => toggleTodoTaskCompletion(todo.id));
 
     //append the checkbox, text and delete button to the li
-    liElem.appendChild(liTextElem);
-    liElem.appendChild(checkboxElem);
-    liElem.appendChild(deleteBtn);
-    ulElem.appendChild(liElem); // append the li to the ul
+    liTaskElem.appendChild(liTextElem);
+    liTaskElem.appendChild(checkboxElem);
+    liTaskElem.appendChild(deleteBtn);
+    ulElem.appendChild(liTaskElem); // append the li to the ul
 
-    return liElem;
+    return liTaskElem;
 };
 
-function renderApp() {
+function renderTodoApp() {
     ulElem.textContent = ""; // clear the list
 
     // iterate over the todoItems array and create a list item for each task
     todoItems.forEach(todo => {
-        createTodoItem(todo); // create and append each todo item
+        createTodoTask(todo); // create and append each todo item
     });
 }
 
@@ -87,12 +92,28 @@ function handleFormSubmit(event) {
 
 
     todoItems.push(newTodoItem); // add new task to state
-    renderApp(); // re-render the list
+    renderTodoApp(); // re-render the list
     inputElem.value = "";
-}
-
+};
 
 formElem.addEventListener("submit", handleFormSubmit);
+
+
+function deleteTodoTask(id, event) {
+    event.stopPropagation(); //prevent triggering other events on the same element when clicking the delete button
+    todoItems = todoItems.filter(todo => todo.id !== id); // remove the task with the given id from the state
+    saveTodosToLocalStorage(); // re-render the list
+};
+
+function toggleTodoTaskCompletion(id) {
+    todoItems = todoItems.map(todo => {
+        if (todo.id === id) {
+            return { ...todo, completed: !todo.completed }; // toggle the completed property
+        }
+        return todo;
+    });
+    saveTodosToLocalStorage();
+};
 
 // STEP 5: Toggle + delete with ONE listener on the list (delegation)
 
