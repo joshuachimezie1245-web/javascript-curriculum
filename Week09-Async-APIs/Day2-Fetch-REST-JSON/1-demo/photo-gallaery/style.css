@@ -1,0 +1,50 @@
+#gallery-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: space-evenly;
+}
+.stock{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.card {
+    /* border: 1px solid #ccc; */
+    margin-bottom: 10px;
+    width: 400px;
+    box-shadow: 2px 3px 3px gray;
+}
+.card-title {
+    color: gray;
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+#load-btn{
+    width: 200px;
+    height: auto;
+    margin: 10px auto;
+    border-radius: 10px;
+    background-color: orange;
+    color: wheat;
+    font-size: 18px;
+    border:none;
+    cursor: pointer;
+}
+.page-title{
+    text-align: center;
+    color: red;
+    text-transform: uppercase;
+    /* padding: 30px 0; */
+}
+p {
+    text-align: center;
+    font-style: italic;
+    color: gray;
+    margin-bottom: 15px;
+}
+.card-img {
+    width: 100%;
+}
